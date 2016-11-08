@@ -36,20 +36,21 @@ VMWARE_USER = 'DESKTOP-J53J8RM\VM-Thor'
 VMWARE_PWD = 'Adcrush123!'
 VMWARE_PORT = 443
 
-VM_GROUP_SIZE = 5
+VM_GROUP_SIZE = 3
 
 # delay between starting individual VMs
 MIN_DELAY = 1
 MAX_DELAY = 60
 
 # VM batch run time
-RUN_TIME = (60*15)
+RUN_TIME = (60*3)
 
 # Verizon-MiFi5510L
 HOTPSPOT_PASSWORD = '0def8621'
 
 # Do not modify
 BUSY_LOOP_DELAY = 3
+SHUTDOWN_LOOP_DELAY = 10
 HOTSPOT_DELAY = (60*3)
 NETSH_DELAY = (30)
 
@@ -271,34 +272,12 @@ def stop_vm_batch(crt_vm_list):
             raise ValueError("VM %s is already stop.  Aborting cycle." % vm.name)
 
         time.sleep(random.randrange(MIN_DELAY, MAX_DELAY))
-        print("Stop %s" % vm.name)
-        task = vm.PowerOff()
-        task_list.append({
-            "vm": vm,
-            "task": task,
-            })
-
-    while task_list:
-        time.sleep(BUSY_LOOP_DELAY)
-        if task_list[0]["task"].info.state == vim.TaskInfo.State.success:
-            print("VM %s stop successful" % task_list[0]["vm"].name)
-            task_list.pop(0)
-        elif task_list[0]["task"].info.state == vim.TaskInfo.State.error:
-            # some vSphere errors only come with their class and no other message
-            print("error type: %s" % task_list[0]["task"].info.error.__class__.__name__)
-            print("found cause: %s" % task_list[0]["task"].info.error.faultCause)
-            for fault_msg in task_list[0]["task"].info.error.faultMessage:
-                print(fault_msg.key)
-                print(fault_msg.message)
-            raise ValueError("Error stop VM %s" % task_list[0]["vm"].name)
-        # check for a question
-        elif task_list[0]["vm"].runtime.question is not None:
-            question_id = task_list[0]["vm"].runtime.question.id
-            question = task_list[0]["vm"].runtime.question.text
-            choices = task_list[0]["vm"].runtime.question.choice.choiceInfo
-            print("Got a question id : %s" % question_id)
-            print("Got a question: %s" % question)
-            print("with answers: %s" % choices)
+        print("Stop %s " % vm.name, end="")
+        vm.ShutdownGuest()
+        if vm.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
+            print(".", end="")
+            time.sleep(SHUTDOWN_LOOP_DELAY)
+        print(" ")
 
 
 def main():
@@ -352,7 +331,7 @@ def main():
             restart_hotspot()
 
     except vmodl.MethodFault as error:
-        print("Caught vmodl fault : " + error.msg)
+        print("Caught vmodl fault : " + error)
         return -1
 
     return 0
