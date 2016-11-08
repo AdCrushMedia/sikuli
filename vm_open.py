@@ -46,6 +46,7 @@ RUN_TIME = (60*15)
 
 HOTSPOT_DELAY = (60*3)
 HOTPSPOT_PASSWORD = '0def8621'
+NETSH_DELAY = (30)
 
 
 def print_vm_info(virtual_machine):
@@ -133,8 +134,22 @@ def login_hotspot(jar):
     return
 
 
+def reconnect_to_wifi():
+    # reconnect to wifi
+    # netsh wlan connect ssid=Verizon-MiFi5510L-D537 name="Verizon-MiFi5510L-D537" interface="Built_in"
+    netsh = check_output('netsh wlan connect ssid=Verizon-MiFi5510L-D537 name="Verizon-MiFi5510L-D537" interface="Built_in"', shell=True).decode()
+
+    match = re.search('Connection request was completed successfully', netsh)
+    if match is None:
+        print("Unable to reconect to Verizon WiFI. Netsh output was: \n[%s]" % netsh)
+        raise ValueError("Unable to reconect to Verizon WiFi")
+    time.sleep(NETSH_DELAY)
+
+
 def restart_hotspot():
     print("Connecting to device")
+
+    reconnect_to_wifi()
 
     jar = requests.cookies.RequestsCookieJar()
     login_hotspot(jar)
@@ -179,8 +194,9 @@ def restart_hotspot():
     url = 'http://my.jetpack/cgi/webui.cgi?id=restarting&as=1&reboot=true'
     response = requests.post(url, data=payload, cookies=jar)
     response.raise_for_status()
-
     time.sleep(HOTSPOT_DELAY)
+
+    reconnect_to_wifi()
 
     # check restarted ok
     url = 'http://my.jetpack/'
