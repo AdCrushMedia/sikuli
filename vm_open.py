@@ -29,23 +29,28 @@ import time
 import hashlib
 import requests
 import re
+from subprocess import check_output
 
 VMWARE_HOST = '127.0.1.1'
 VMWARE_USER = 'DESKTOP-J53J8RM\VM-Thor'
 VMWARE_PWD = 'Adcrush123!'
 VMWARE_PORT = 443
 
-BUSY_LOOP_DELAY = 3
-
 VM_GROUP_SIZE = 5
 
+# delay between starting individual VMs
 MIN_DELAY = 1
 MAX_DELAY = 60
 
+# VM batch run time
 RUN_TIME = (60*15)
 
-HOTSPOT_DELAY = (60*3)
+# Verizon-MiFi5510L
 HOTPSPOT_PASSWORD = '0def8621'
+
+# Do not modify
+BUSY_LOOP_DELAY = 3
+HOTSPOT_DELAY = (60*3)
 NETSH_DELAY = (30)
 
 
