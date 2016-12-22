@@ -11,3 +11,7 @@ detailed specifics of what the script should do:
 - Restart Verizon hotspot via http://my.jetpack
 - Opening 5 new randomly selected virtual machines and repeating the process from the beginning
 - Continuing to do these steps until every virtual machine in VMWare Workstation 12 has been accessed, each virtual machine having only been opened and closed one time
+
+## FirefoxBotAD
+
+Directory containing all of the SikuliX scripts and assets for the farming bot(s).

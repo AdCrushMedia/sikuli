@@ -1,0 +1,16 @@
+{
+	"app_title": "Sikuli Bot",
+	"watch_folder": "C:/Users/VMT-1/Desktop/FireFoxBotAD/fb.sikuli",
+
+	"ftp": {
+		"address": "138.68.7.25",
+		"username": "root",
+		"password": "3e66f8cc193a18b9"
+	},
+
+	"ftp_home": "/root/auto_update_host_ff/",
+	"exe_to_run": "C:/Users/VMT-1/Desktop/Sikuli/runsikulix.cmd",
+	"exe_argument": "",
+
+	"keep_pkg": true
+}

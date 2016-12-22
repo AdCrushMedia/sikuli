@@ -1,0 +1,117 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>fb.sikuli</h2> <a href="fb.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">from</span> sikuli <span class="kw">import</span> *
+<span class="kw">import</span> random
+
+fbLoginEmailTextfield =  <span class="str">""</span>
+fbLoginPasswordText = <span class="str">""</span>
+fbLoginButton = <span class="str">""</span>
+fbUrl = <span class="str">"http://facebook.com"</span>
+broserLocation = <span class="str">"C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe -incognito"</span>
+defaultEmail = <span class="str">"Lisbethloeffert83@Gmail.Com"</span>
+defaultPassword = <span class="str">"p4ssword123"</span>
+fanFageGroup = [<span class="str">'buzzfeed'</span>, <span class="str">'viralnova'</span>, <span class="str">'mashable'</span>, <span class="str">'techcrunch'</span>]
+fanpageCsvPath = <span class="str">'C:\\Users\\Jason Javier\\Desktop\\Sikuli\\project\\fb.sikuli\\csv\\fanpage.csv'</span>
+commentCsvPath = <span class="str">'C:\\Users\\Jason Javier\\Desktop\\Sikuli\\project\\fb.sikuli\\csv\\comments.csv'</span>
+postCsvPath = <span class="str">'C:\\Users\\Jason Javier\\Desktop\\Sikuli\\project\\fb.sikuli\\csv\\post.csv'</span>
+
+isLoggedIn = <span class="dig">0</span> <span class="cmt">#0 not login to facebook, 1 logged to facebook</span>
+userAction = [<span class="str">""</span>] <span class="cmt">#["like_fan_page", "likes"] #"share_post", "likes", "hide_post", "check_notif", "skip"</span>
+
+randomPost = [
+        <span class="str">"Whatever doesn't kill ME, had better run like hell!"</span>,
+        <span class="str">"Everything happens for a reason, otherwise, it wouldn't happen... "</span>,
+        <span class="str">"the person that talks behind my back better have less bills, drama, and better swag than I do. If not, fix your own mess 1st. :("</span>,
+        <span class="str">"Apologising doesn't mean that you were wrong, or the other person was right. It means you value your relationship more then your ego :)"</span>,
+        <span class="str">"Don't you just hate it when you miss a call,but when you call back,It goes to answering machine. What did the person drop their phone and run away?!"</span>,
+        <span class="str">"how come on Facebook people say \"hi\" but wen u reply, u get ignored??"</span>,
+        <span class="str">"I love to hear that little voice that says\"I love you\" Grand kids are so special , you get to see your kids little again through them."</span>,
+
+]
+
+
+
+
+actionPattern1 = [<span class="str">"likes"</span>, <span class="str">"view_friends"</span>,  <span class="str">"like_fan_page"</span>,  <span class="str">"buzzfeed"</span>, <span class="str">"page_feed"</span>, <span class="str">"post_status"</span>, <span class="str">"logout"</span>]  <span class="cmt">#"likes", "view_friends",  "like_fan_page",  "buzzfeed", "page_feed", "post_status"</span>
+actionPattern2 = [<span class="str">"likes"</span>, <span class="str">"post_status"</span>,  <span class="str">"view_friends"</span>,  <span class="str">"page_feed"</span>, <span class="str">"buzzfeed"</span>, <span class="str">"like_fan_page"</span>, <span class="str">"logout"</span>]
+actionPattern3 = [<span class="str">"likes"</span>, <span class="str">"like_fan_page"</span>, <span class="str">"page_feed"</span>, <span class="str">"post_status"</span>, <span class="str">"buzzfeed"</span>, <span class="str">"view_friends"</span>, <span class="str">"logout"</span>]
+testPattern = [<span class="str">'buzzfeed'</span>, <span class="str">'logout'</span>]
+
+actionPattern = [actionPattern1,actionPattern2, actionPattern3] <span class="cmt">#, actionPattern2, actionPattern3</span>
+
+searchBar = Pattern(<img src="1465713188410.png" />).targetOffset(-<span class="dig">63</span>,<span class="dig">0</span>) <span class="cmt">#Pattern("images/searchBar.png").similar(0.80).targetOffset(121,0) #Pattern("images/searchBar.png").similar(0.80).targetOffset(53,0)</span>
+loginLogo = <img src="images/loginLogo.png" />
+checkNotifCount = <span class="dig">0</span>
+</pre>
+</body>
+</html>

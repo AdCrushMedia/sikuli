@@ -1,0 +1,137 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>fb.sikuli</h2> <a href="fb.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">from</span> sikuli <span class="kw">import</span> *
+load(<span class="str">"lib\\mysql\\mysql-connector-java-5.1.39-bin.jar"</span>)
+<span class="kw">from</span> com.ziclix.python.sql <span class="kw">import</span> zxJDBC
+
+<span class="kw">import</span> random
+
+<span class="kw">import</span> json
+<span class="kw">from</span> pprint <span class="kw">import</span> pprint
+
+<span class="kw">import</span> os
+script_dir = os.path.dirname(__file__)
+
+<span class="kw">with</span> open(script_dir + <span class="str">'\\settings.json'</span>) <span class="kw">as</span> data_file:
+    setting = json.load(data_file)
+
+
+<span class="cmt">#load("lib\\mysql\\mysql-connector-java-5.1.39-bin.jar") # see comment</span>
+
+
+
+DBHOST = <span class="str">"jdbc:mysql://138.68.7.25/sikuli_db"</span> <span class="cmt">#138.68.7.25</span>
+DBUSERNAME = <span class="str">"root"</span>
+DBPASSWORD = <span class="str">"3e66f8cc193a18b9"</span> <span class="cmt">#3e66f8cc193a18b9</span>
+
+db = False
+
+<span class="kw">try</span>:
+
+        db = zxJDBC.connect(DBHOST, DBUSERNAME, DBPASSWORD, <span class="str">"com.mysql.jdbc.Driver"</span>, CHARSET=<span class="str">'utf-8'</span>)
+
+<span class="kw">except</span> Exception, e:
+
+        <span class="kw">print</span> <span class="str">"Failed to connect to the database. Please check your internet connection"</span>
+
+
+fbUrl = <span class="str">"http://facebook.com"</span>
+
+broserLocation = setting[<span class="str">'chrome'</span>] <span class="cmt">#path for google chrome</span>
+
+
+defaultEmail = setting[<span class="str">'fb'</span>][<span class="str">'email'</span>] <span class="cmt">#setting['fb']['email'] #facebook email</span>
+defaultPassword = setting[<span class="str">'fb'</span>][<span class="str">'password'</span>] <span class="cmt">#setting['fb']['password'] #facebook password</span>
+
+<span class="cmt">#CSV LOCATIONS</span>
+<span class="cmt">#fanpageCsvPath = 'C:\\Users\\Jason Javier\\Desktop\\fb.sikuli\\csv\\fanpage.csv'  #fanpage csv location</span>
+<span class="cmt">#commentCsvPath = 'C:\\Users\\Jason Javier\\Desktop\\fb.sikuli\\csv\\comments.csv' #comment csv location</span>
+<span class="cmt">#postCsvPath = 'C:\\Users\\Jason Javier\\Desktop\\fb.sikuli\\csv\\post.csv' #post csv location</span>
+
+
+actionPattern1 = [<span class="str">"likes"</span>,   <span class="str">"like_fan_page"</span>,  <span class="str">"buzzfeed"</span>, <span class="str">'trending'</span>, <span class="str">"page_feed"</span>, <span class="str">"post_status"</span>, <span class="str">"logout"</span>]  <span class="cmt">#"likes", "view_friends",  "like_fan_page",  "buzzfeed", "page_feed", "post_status"</span>
+actionPattern2 = [<span class="str">"likes"</span>, <span class="str">"post_status"</span>,  <span class="str">"view_friends"</span>,  <span class="str">'trending'</span>, <span class="str">"buzzfeed"</span>,  <span class="str">"logout"</span>]
+actionPattern3 = [<span class="str">"likes"</span>, <span class="str">"like_fan_page"</span>, <span class="str">"page_feed"</span>, <span class="str">"post_status"</span>, <span class="str">"buzzfeed"</span>, <span class="str">"view_friends"</span>, <span class="str">'trending'</span>, <span class="str">"logout"</span>]
+actionPattern4 = [<span class="str">"likes"</span>, <span class="str">"post_status"</span>, <span class="str">"buzzfeed"</span> ,  <span class="str">'trending'</span>,  <span class="str">"logout"</span>]
+testPattern = [actionPattern3]
+
+<span class="cmt">#like_fan_page, page_feed, post_status</span>
+
+actionPattern = [actionPattern3] <span class="cmt">#[actionPattern1, actionPattern2, actionPattern3] #, actionPattern2, actionPattern3</span>
+
+<span class="cmt">#searchBar = Pattern("1465713188410.png").targetOffset(-63,0) #Pattern("images/searchBar.png").similar(0.80).targetOffset(121,0) #Pattern("images/searchBar.png").similar(0.80).targetOffset(53,0)</span>
+loginLogo = <img src="images/loginLogo.png" />
+checkNotifCount = <span class="dig">0</span>
+</pre>
+</body>
+</html>

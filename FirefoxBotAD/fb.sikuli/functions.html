@@ -1,0 +1,1050 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>fb.sikuli</h2> <a href="fb.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">from</span> sikuli <span class="kw">import</span> *
+
+<span class="kw">import</span> globalvariable
+reload(globalvariable)
+<span class="kw">from</span> globalvariable <span class="kw">import</span> *
+<span class="kw">import</span> random
+<span class="kw">from</span> random <span class="kw">import</span> shuffle
+<span class="kw">import</span> time
+<span class="kw">import</span> csv
+
+
+
+<span class="kw">def</span> developerModeEnable() :
+
+        devImage = Pattern(<img src="images/developerMode.png" />).targetOffset(<span class="dig">36</span>,-<span class="dig">1</span>)
+
+        <span class="kw">if</span> (exists(devImage)) :
+                <span class="skw">click</span>(devImage);
+
+                <span class="kw">return</span>
+
+        <span class="kw">return</span>
+
+
+
+<span class="kw">def</span> getcsvData(filename) :
+
+        <span class="kw">with</span> open(filename, <span class="str">'rU'</span>) <span class="kw">as</span> csvfile:
+                csvreader = csv.reader(csvfile)
+                my_list = list(csvreader)
+
+                data = random.choice(my_list)
+
+                <span class="kw">return</span> data
+
+
+<span class="kw">def</span> openBrowser():
+        browser = App(<span class="str">"Firefox"</span>)
+        isOpenChrome = <span class="dig">0</span>
+
+        <span class="kw">if</span> <span class="kw">not</span> browser.window():
+                isOpenChrome = <span class="dig">1</span>
+        <span class="kw">else</span> :
+                App.close(<span class="str">"Mozilla Firefox.app"</span>)
+                isOpenChrome = <span class="dig">1</span>
+
+        <span class="kw">if</span> (isOpenChrome == <span class="dig">1</span>) :
+                <span class="skw">wait</span>(<span class="dig">5</span>)
+                App.open(broserLocation + <span class="str">" --start-maximized"</span>);<span class="skw">wait</span>(<span class="dig">2</span>)
+
+                <span class="skw">wait</span>(<span class="dig">5</span>)
+                <span class="cmt">#developerModeEnable()</span>
+
+                browser.focus();<span class="skw">wait</span>(<span class="dig">2</span>)
+                <span class="skw">type</span>(<span class="str">'l'</span>, Key.CTRL);<span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">type</span>(fbUrl);<span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">type</span>(Key.ENTER)
+
+        <span class="kw">else</span> :
+                <span class="skw">popup</span>(<span class="str">'Firefox not found'</span>)
+                exit(<span class="dig">1</span>)
+
+<span class="kw">def</span> getActions():
+
+        random.shuffle(userAction)
+        <span class="kw">return</span> userAction
+
+
+<span class="kw">def</span> loginFacebook():
+
+
+        textEmail = Pattern(<img src="images/Firefox/emailTextbox2.png" />).exact().targetOffset(-<span class="dig">33</span>,<span class="dig">23</span>)
+
+        textPassword = Pattern(<img src="images/Firefox/passwordTextbox2.png" />).targetOffset(-<span class="dig">5</span>,<span class="dig">22</span>) <span class="cmt">#Pattern("images/passwordTextbox.png").similar(0.90).targetOffset(-63,7)</span>
+
+        loginButton = Pattern(<img src="images/Firefox/loginButton.png" />).targetOffset(-<span class="dig">2</span>,<span class="dig">0</span>)
+
+        loginFBLogo = Pattern(<img src="images/Firefox/loginFbLogo.png" />).similar(<span class="dig">0.90</span>)
+
+        rememberPopUp = Pattern(<img src="images/Firefox/rememberPopup.png" />)
+
+        <span class="skw">wait</span>(<span class="dig">8</span>)
+
+        <span class="kw">if</span> (exists(loginLogo)) :
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+
+                <span class="kw">return</span>
+
+
+        <span class="kw">if</span> (exists(loginFBLogo)) :
+                <span class="skw">wait</span>(loginButton, FOREVER)
+                <span class="skw">click</span>(textEmail);<span class="skw">wait</span>(<span class="dig">2</span>) <span class="cmt">#click email text box</span>
+                <span class="skw">type</span>(<span class="str">'a'</span>, Key.CTRL);<span class="skw">wait</span>(<span class="dig">1</span>)
+                <span class="skw">type</span>(Key.DELETE);<span class="skw">wait</span>(<span class="dig">1</span>)
+                <span class="skw">type</span>(defaultEmail);<span class="skw">wait</span>(<span class="dig">2</span>) <span class="cmt">#start typing email</span>
+
+                <span class="skw">click</span>(textPassword);<span class="skw">wait</span>(<span class="dig">2</span>) <span class="cmt">#click the password text box</span>
+                <span class="skw">type</span>(<span class="str">'a'</span>, Key.CTRL);<span class="skw">wait</span>(<span class="dig">1</span>)
+                <span class="skw">type</span>(Key.DELETE);<span class="skw">wait</span>(<span class="dig">1</span>)
+                <span class="skw">type</span>(defaultPassword);<span class="skw">wait</span>(<span class="dig">2</span>) <span class="cmt">#start typing password</span>
+                <span class="skw">type</span>(Key.ENTER);<span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="cmt">#click(loginButton);wait(1) #click login button</span>
+
+                <span class="kw">if</span> (exists(rememberPopUp)) :
+                        <span class="skw">click</span>(rememberPopUp);<span class="skw">wait</span>(<span class="dig">4</span>)
+
+                <span class="skw">wait</span>(loginLogo, FOREVER)
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+
+
+                <span class="kw">return</span>
+
+
+        <span class="cmt">#test</span>
+        <span class="cmt">#actionNotif();wait(2)</span>
+
+<span class="kw">def</span> popUpChrome() :
+
+        addPhoneNumber = Pattern(<img src="images/addPhoneNumber.png" />).targetOffset(-<span class="dig">214</span>,<span class="dig">2</span>)
+        savePassword =  Pattern(<img src="images/savePass.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">28</span>,-<span class="dig">3</span>)
+        notificationAlert = Pattern(<img src="images/notifAlert.png" />).similar(<span class="dig">0.90</span>).targetOffset(<span class="dig">32</span>,-<span class="dig">5</span>)
+        notificationAlert2 = Pattern(<img src="images/notifAlert2.png" />).similar(<span class="dig">0.80</span>).targetOffset(<span class="dig">43</span>,<span class="dig">1</span>)
+        blueAlert = Pattern(<img src="images/blueAlertClosedButton.png" />).similar(<span class="dig">0.80</span>)
+
+        <span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(savePassword)) :
+                <span class="skw">click</span>(savePassword);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(notificationAlert)) :
+                <span class="skw">click</span>(notificationAlert);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(notificationAlert2)) :
+                <span class="skw">click</span>(notificationAlert2);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(blueAlert)) :
+                <span class="skw">click</span>(blueAlert);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(addPhoneNumber)) :
+                <span class="skw">click</span>(addPhoneNumber);<span class="skw">wait</span>(<span class="dig">2</span>)
+                <span class="skw">type</span>(Key.F5);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+
+
+
+
+<span class="kw">def</span> searchBarUrl(url) :
+
+        reloadButton = Pattern(<img src="1465916645829.png" />).similar(<span class="dig">0.80</span>)
+
+        <span class="skw">type</span>(<span class="str">"l"</span>, KeyModifier.CTRL);<span class="skw">wait</span>(<span class="dig">1</span>)
+        <span class="skw">type</span>(<span class="str">'a'</span>, Key.CTRL);<span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="skw">type</span>(Key.DELETE);<span class="skw">wait</span>(<span class="dig">0.5</span>)
+        paste(url);<span class="skw">wait</span>(<span class="dig">2</span>)
+        <span class="skw">type</span>(Key.ENTER);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(reloadButton)) :
+                <span class="skw">click</span>(reloadButton);<span class="skw">wait</span>(<span class="dig">1</span>)
+
+        <span class="skw">wait</span>(loginLogo, FOREVER)
+
+<span class="kw">def</span> actionNotif() :
+
+        notifButton = Pattern(<img src="images/Firefox/notif.png" />);
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(notifButton)) :
+                <span class="kw">return</span>
+
+        <span class="kw">if</span>(exists(notifButton)):
+                <span class="skw">wait</span>(<span class="dig">4</span>)
+                <span class="skw">click</span>(notifButton);<span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">click</span>(notifButton);<span class="skw">wait</span>(<span class="dig">1</span>)
+
+                <span class="kw">return</span>
+
+<span class="kw">def</span> loginLogoHover() :
+        <span class="kw">if</span> (exists(loginLogo)) :
+                hover(loginLogo);<span class="skw">wait</span>(<span class="dig">2</span>)
+
+        <span class="kw">return</span>
+
+
+
+<span class="kw">def</span> share() :
+
+        count = <span class="dig">0</span>
+        maxCount = <span class="dig">3</span>
+
+        shareButton = Pattern(<img src="images/shareButton.png" />).similar(<span class="dig">0.80</span>).targetOffset(-<span class="dig">4</span>,-<span class="dig">1</span>)
+        closedButton = Pattern(<img src="images/sharepost-closed.png" />).similar(<span class="dig">0.90</span>)
+        sharePopUp = Pattern(<img src="images/Firefox/sharePopup.png" />).targetOffset(-<span class="dig">62</span>,-<span class="dig">23</span>)
+        sharePostButton = Pattern(<img src="images/sharePostButton.png" />).targetOffset(<span class="dig">84</span>,-<span class="dig">3</span>)
+
+
+
+
+        <span class="cmt">##searchBarUrl("https://www.facebook.com")</span>
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(shareButton)) :
+                <span class="kw">return</span> <span class="dig">0</span>
+
+        <span class="kw">if</span>(exists(shareButton)):
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">click</span>(shareButton);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+
+                <span class="kw">if</span> (exists(sharePopUp)) :
+                        <span class="skw">wait</span>(sharePopUp, FOREVER)
+                        <span class="skw">click</span>(sharePopUp);<span class="skw">wait</span>(<span class="dig">1</span>)
+                        <span class="skw">wait</span>(closedButton, FOREVER)
+                <span class="cmt">#hover(closedButton)</span>
+
+
+                <span class="kw">if</span> (exists(sharePostButton)) :
+                        <span class="skw">click</span>(sharePostButton);<span class="skw">wait</span>(<span class="dig">7</span>)
+                        wheel(WHEEL_DOWN, <span class="dig">12</span>);<span class="skw">wait</span>(<span class="dig">1</span>)
+
+
+                        <span class="kw">return</span> <span class="dig">1</span>
+
+
+                <span class="kw">if</span> (<span class="kw">not</span> exists(sharePostButton)) :
+                        wheel(WHEEL_DOWN, <span class="dig">4</span>);
+
+                        <span class="kw">if</span> (exists(sharePostButton)) :
+                                <span class="skw">click</span>(sharePostButton);<span class="skw">wait</span>(<span class="dig">7</span>)
+                                wheel(WHEEL_DOWN, <span class="dig">12</span>);<span class="skw">wait</span>(<span class="dig">1</span>)
+                                loginLogoHover()
+
+                                <span class="kw">return</span> <span class="dig">1</span>
+
+
+<span class="kw">def</span> like():
+
+        count = <span class="dig">0</span>
+        maxCount = <span class="dig">3</span>
+        <span class="cmt">#wheel(WHEEL_DOWN, 4);wait(1)</span>
+
+        fbLikeButton = Pattern(<img src="images/Firefox/likeButton.png" />).similar(<span class="dig">0.80</span>)
+        currentLikeButton = Pattern(<img src="images/currentLike.png" />).similar(<span class="dig">0.96</span>)
+
+
+        <span class="cmt">#searchBarUrl("https://www.facebook.com")</span>
+        <span class="kw">if</span> (<span class="kw">not</span> exists(fbLikeButton)) :
+                <span class="kw">return</span> <span class="dig">0</span>
+
+        <span class="kw">if</span>(exists(fbLikeButton)):
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">click</span>(fbLikeButton);<span class="skw">wait</span>(<span class="dig">2</span>)
+                loginLogoHover()
+
+                <span class="kw">return</span> <span class="dig">1</span>
+
+<span class="kw">def</span> writeComment():
+
+        <span class="kw">try</span>:
+
+                C = db.cursor()
+                C.execute (<span class="str">"SELECT * FROM comments ORDER BY RAND() LIMIT 1"</span>)
+                row = C.fetchone()
+
+        <span class="kw">except</span> Exception, e:
+                <span class="kw">print</span> (<span class="str">"Failed to connect the database : Comment"</span>);
+
+                <span class="kw">return</span> <span class="dig">1</span>
+
+
+
+        data =  row[<span class="dig">1</span>] <span class="cmt">#data = getcsvData(commentCsvPath)</span>
+
+        <span class="cmt">#writeImage = Pattern("images/write-comment.png").targetOffset(-20,0);</span>
+
+
+        writeImage = Pattern(<img src="images/Firefox/write-comment.png" />).targetOffset(-<span class="dig">34</span>,<span class="dig">3</span>);
+
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(writeImage)) :
+                <span class="kw">return</span> <span class="dig">0</span>
+
+        <span class="kw">if</span>(exists(writeImage)):
+                <span class="skw">wait</span>(<span class="dig">2</span>)
+                <span class="skw">click</span>(writeImage);<span class="skw">wait</span>(<span class="dig">2</span>)
+                <span class="skw">type</span>(data); <span class="skw">wait</span>(<span class="dig">2</span>)
+                <span class="skw">type</span>(Key.ENTER);<span class="skw">wait</span>(<span class="dig">4</span>)
+
+                loginLogoHover()
+
+                <span class="kw">return</span> <span class="dig">1</span>
+
+
+<span class="kw">def</span> commentLike():
+        commentButton = <img src="images/FireFox/comments.png" />
+        likeComment = Pattern(<img src="images/Firefox/likeComments.png" />).targetOffset(-<span class="dig">25</span>,-<span class="dig">2</span>)
+
+
+        <span class="kw">if</span> (exists(commentButton)) :
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">click</span>(commentButton);<span class="skw">wait</span>(<span class="dig">4</span>)
+                <span class="kw">if</span> (exists(likeComment)) :
+                        <span class="skw">wait</span>(<span class="dig">3</span>)
+                        <span class="skw">click</span>(random.choice(list(findAll(likeComment))));<span class="skw">wait</span>(<span class="dig">1</span>)
+
+                        <span class="kw">return</span> <span class="dig">1</span>
+
+                <span class="kw">if</span> (<span class="kw">not</span> exists(likeComment)) :
+                        <span class="kw">return</span> <span class="dig">0</span>
+
+
+
+
+<span class="kw">def</span> actionLike():
+
+        maxLike = <span class="dig">3</span>
+        maxLikeComment = <span class="dig">1</span>
+        radomizeLike = [<span class="str">'likes'</span>, <span class="str">'skip'</span>, <span class="str">'skip'</span>]
+
+        fbLikeButton = Pattern(<img src="images/Firefox/likeButton.png" />).similar(<span class="dig">0.90</span>)
+
+
+        currentLikeButton = Pattern(<img src="images/currentLike.png" />).similar(<span class="dig">0.96</span>)
+        moreComments = Pattern(<img src="images/Firefox/viewMoreComments.png" />)
+        likeCommentsButton = Pattern(<img src="images/Firefox/likeComments.png" />).targetOffset(-<span class="dig">25</span>,-<span class="dig">2</span>)
+
+        homeButton = <img src="images/home.png" />
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="skw">type</span>(Key.HOME);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+
+        <span class="kw">if</span> (exists(homeButton)) :
+                <span class="skw">click</span>(homeButton)
+                <span class="skw">wait</span>(<span class="dig">4</span>)
+
+                <span class="kw">while</span>(<span class="dig">1</span>) :
+
+                        actions = random.choice(radomizeLike)
+
+                        loginLogoHover()
+
+                        wheel(WHEEL_DOWN, <span class="dig">2</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+
+                        <span class="kw">if</span> (maxLike &lt;= <span class="dig">0</span> ) :
+
+                                <span class="kw">break</span>
+
+                        <span class="kw">if</span> (actions == <span class="str">"skip"</span>) :
+                                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+                                <span class="kw">continue</span>
+                        <span class="kw">else</span> :
+
+                                <span class="kw">if</span> (<span class="kw">not</span> exists(fbLikeButton)) :
+                                        <span class="kw">continue</span>
+
+                                <span class="kw">if</span>(exists(fbLikeButton) <span class="kw">and</span> <span class="kw">not</span> exists(currentLikeButton)):
+                                        <span class="skw">wait</span>(<span class="dig">3</span>)
+                                        <span class="skw">click</span>(fbLikeButton);<span class="skw">wait</span>(<span class="dig">3</span>)
+                                        maxLike = maxLike - <span class="dig">1</span>
+
+
+                                        <span class="kw">if</span> (maxLikeComment &gt; <span class="dig">0</span>) :
+
+                                                <span class="kw">if</span> (exists(moreComments)) :
+                                                        <span class="skw">click</span>(moreComments);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+                                                <span class="kw">if</span> (exists(likeCommentsButton)) :
+                                                        <span class="skw">wait</span>(<span class="dig">3</span>)
+                                                        <span class="skw">click</span>(likeCommentsButton);<span class="skw">wait</span>(<span class="dig">3</span>)
+                                                        maxLikeComment = maxLikeComment - <span class="dig">1</span>
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="kw">return</span>
+
+
+
+
+
+<span class="kw">def</span> Friends() :
+        newsFeedButton  = Pattern(<img src="images/Home.png" />).targetOffset(-<span class="dig">32</span>,<span class="dig">1</span>)
+        friendTab = Pattern(<img src="images/about.png" />).targetOffset(<span class="dig">81</span>,<span class="dig">2</span>)
+        friendsButton = Pattern(<img src="images/friends.png" />).similar(<span class="dig">0.80</span>).targetOffset(-<span class="dig">295</span>,<span class="dig">1</span>)
+        timelineText = <img src="images/timeline.png" />
+
+        scrollLimit = <span class="dig">5</span>
+
+        <span class="kw">if</span> (exists(newsFeedButton)) :
+                <span class="skw">click</span>(newsFeedButton); <span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">wait</span>(friendTab, FOREVER);
+                <span class="skw">click</span>(friendTab);<span class="skw">wait</span>(<span class="dig">2</span>)
+
+                <span class="kw">while</span>(<span class="dig">1</span>) :
+
+                        <span class="kw">if</span> (scrollLimit &lt;= <span class="dig">0</span>) :
+
+                                <span class="kw">print</span> <span class="str">"end"</span>
+                                <span class="kw">break</span>;
+                        wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+
+                        <span class="kw">if</span> (exists(friendsButton)) :
+                                <span class="skw">click</span>(random.choice(list(findAll(friendsButton))))
+                                <span class="skw">wait</span>(timelineText, FOREVER)
+                                loginLogoHover()
+                                startScrollLimit = scrollLimit - <span class="dig">1</span>
+
+                        <span class="kw">if</span> (<span class="kw">not</span> exists(friendsButton)) :
+                                scrollLimit = scrollLimit - <span class="dig">1</span>
+                        <span class="cmt">#click(random.choice(list(findAll(Pattern(addFriendButton).similar(0.80).targetOffset(-546,2)))))</span>
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(newsFeedButton)) :
+
+                <span class="kw">return</span>
+
+
+
+
+
+<span class="kw">def</span> buzzFeed() :
+
+
+        <span class="kw">try</span>:
+
+                C = db.cursor()
+                C.execute (<span class="str">"SELECT * FROM fan_pages ORDER BY RAND() LIMIT 1"</span>)
+                row = C.fetchone()
+
+        <span class="kw">except</span> Exception, e:
+                <span class="kw">print</span> (<span class="str">"Failed to connect the database : BuzzFeed"</span>);
+
+                <span class="kw">return</span> <span class="dig">1</span>
+
+
+
+        data =  row[<span class="dig">2</span>] <span class="cmt">#data = getcsvData(commentCsvPath)</span>
+
+        homeButton = <img src="images/home.png" />
+        seeMore = <img src="images/seeMore.png" />
+        searchButton = Pattern(<img src="images/search.png" />).similar(<span class="dig">0.80</span>).targetOffset(-<span class="dig">60</span>,<span class="dig">0</span>)
+
+        buzzFeedImage = <span class="str">'images/loginLogo.png'</span> <span class="cmt">#Pattern(data).exact()</span>
+        typeText = row[<span class="dig">5</span>]
+        fanPageLikeButton = Pattern(<img src="images/Firefox/fanPageLikeButton.png" />).exact()
+
+
+        radomizeAct = [<span class="str">'likes'</span>, <span class="str">'skip'</span>,  <span class="str">'share'</span>, <span class="str">'writeComment'</span>]<span class="cmt">#['likes', 'skip', 'skip', 'share', 'writeComment'] #'likes', 'skip', 'skip', 'share', 'writeComment'</span>
+
+        likeLimit = <span class="dig">1</span>
+        shareLimit = <span class="dig">1</span>
+        writeLimit =  <span class="dig">1</span>
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="skw">type</span>(Key.HOME);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(homeButton)) :
+                <span class="skw">click</span>(homeButton)
+                <span class="cmt">#wait(searchButton, FOREVER)</span>
+                <span class="skw">wait</span>(<span class="dig">4</span>)
+                <span class="cmt">#click(searchButton);wait(3)</span>
+                <span class="cmt">#type(typeText); wait(2)</span>
+
+                <span class="skw">type</span>(<span class="str">"l"</span>, KeyModifier.CTRL)
+                paste(typeText);<span class="skw">wait</span>(<span class="dig">5</span>)
+                <span class="skw">type</span>(Key.ENTER)
+
+                <span class="skw">wait</span>(buzzFeedImage, FOREVER);<span class="skw">wait</span>(<span class="dig">7</span>)
+
+                <span class="kw">if</span> (exists(buzzFeedImage)) :
+
+
+                        <span class="kw">if</span> (exists(fanPageLikeButton)) :
+                                <span class="skw">click</span>(fanPageLikeButton);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+                        <span class="kw">while</span>(<span class="dig">1</span>) :
+
+                                <span class="cmt">#if (exists(seeMore)) :</span>
+                                        <span class="cmt">#click(seeMore);wait(5)</span>
+
+                                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+
+                                <span class="kw">if</span> (shareLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> <span class="str">'share'</span> <span class="kw">in</span> radomizeAct) :
+                                        radomizeAct.remove(<span class="str">'share'</span>)
+
+                                <span class="kw">if</span> (likeLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> <span class="str">'likes'</span> <span class="kw">in</span> radomizeAct) :
+                                        radomizeAct.remove(<span class="str">'likes'</span>)
+
+                                <span class="kw">if</span> (writeLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> <span class="str">'writeComment'</span> <span class="kw">in</span> radomizeAct) :
+                                        radomizeAct.remove(<span class="str">'writeComment'</span>)
+
+                                actions = random.choice(radomizeAct)
+
+                                <span class="kw">if</span> (likeLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> shareLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> writeLimit &lt;= <span class="dig">0</span>) :
+                                        <span class="kw">break</span>
+
+                                <span class="kw">if</span> (actions == <span class="str">"skip"</span>) :
+                                        wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+                                        <span class="kw">continue</span>
+
+                                <span class="kw">if</span> (actions == <span class="str">"likes"</span>) :
+                                        like()
+                                        likeLimit = likeLimit - <span class="dig">1</span>
+
+
+                                <span class="kw">if</span> (actions == <span class="str">'share'</span>) :
+                                        share()
+                                        shareLimit  = shareLimit - <span class="dig">1</span>
+
+                                <span class="kw">if</span> (actions == <span class="str">'writeComment'</span>) :
+                                        writeComment()
+                                        writeLimit = writeLimit - <span class="dig">1</span>
+
+                <span class="kw">if</span> (<span class="kw">not</span> exists(buzzFeedImage)) :
+
+                        <span class="kw">return</span> <span class="dig">1</span>
+
+
+<span class="kw">def</span> actionLikeFanPage():
+
+        homeButton = <img src="images/home.png" />
+        likePages = <img src="images/likepages.png" />
+        postButton = <img src="images/postButton.png" />
+
+        yourPage = Pattern(<img src="images/yourPage.png" />).similar(<span class="dig">0.85</span>)
+        approvedPage = Pattern(<img src="images/approvedPage.png" />).similar(<span class="dig">0.90</span>).targetOffset(-<span class="dig">16</span>,<span class="dig">1</span>) <span class="cmt">#Pattern("images/approvedPage.png").similar(0.90).targetOffset(-55,-128)</span>
+        likeButton = <img src="images/pagesLikeButton.png" />
+        fanPageLikeButton = Pattern(<img src="images/FireFox/fanPageLikeButton.png" />).similar(<span class="dig">0.90</span>)
+
+        likeLimit = <span class="dig">2</span>
+        scrollLimit = <span class="dig">10</span>
+        limit = <span class="dig">10</span>
+        approvedPageLimit = <span class="dig">20</span>;
+        startScroll = <span class="dig">0</span>;
+        approvedScroll = <span class="dig">0</span>
+
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="skw">type</span>(Key.HOME);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+
+        <span class="kw">if</span> (exists(homeButton)) :
+                <span class="skw">click</span>(homeButton)
+                <span class="skw">wait</span>(postButton, FOREVER)
+
+                <span class="kw">while</span>(<span class="kw">not</span> exists(likePages)) :
+                        wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+                        limit = limit - <span class="dig">1</span>
+
+                        <span class="kw">if</span> (limit &lt;= <span class="dig">0</span>) :
+
+                                <span class="kw">break</span>
+                                <span class="kw">return</span>
+
+                <span class="kw">else</span> :
+
+                        <span class="kw">if</span> (exists(likePages)) :
+                                <span class="skw">doubleClick</span>(likePages);
+                                approvedScroll = <span class="dig">1</span>
+                        <span class="kw">else</span> :
+                                <span class="kw">return</span>
+
+
+        <span class="kw">if</span> (approvedScroll == <span class="dig">1</span>) :
+                <span class="skw">wait</span>(loginLogo, FOREVER)
+                <span class="kw">while</span> (<span class="kw">not</span> exists(approvedPage)) :
+                        wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">3</span>)
+                        approvedPageLimit = approvedPageLimit - <span class="dig">1</span>
+
+                        <span class="kw">if</span> (approvedPageLimit &lt;= <span class="dig">0</span>) :
+
+                                <span class="kw">break</span>
+                                <span class="kw">return</span>
+                <span class="kw">else</span> :
+
+                        <span class="kw">if</span> (exists(approvedPage)) :
+                                <span class="skw">click</span>(approvedPage);<span class="skw">wait</span>(loginLogo, <span class="dig">20</span>)
+                                startScroll = <span class="dig">1</span>
+                        <span class="kw">else</span> :
+                                <span class="kw">return</span>
+
+
+        <span class="kw">if</span> (startScroll == <span class="dig">1</span>) :
+
+
+
+                        <span class="kw">while</span> (<span class="kw">not</span> exists(fanPageLikeButton)) :
+                                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">3</span>)
+                                scrollLimit = scrollLimit - <span class="dig">1</span>
+
+                                <span class="kw">if</span> (scrollLimit &lt;= <span class="dig">0</span>) :
+
+                                        <span class="kw">break</span>
+                                        <span class="kw">return</span>
+
+                        <span class="kw">else</span> :
+                                <span class="kw">if</span> (exists(fanPageLikeButton)) :
+                                        <span class="skw">wait</span>(<span class="dig">5</span>)
+                                        <span class="skw">click</span>(fanPageLikeButton)
+                                        <span class="kw">return</span>
+                                <span class="kw">else</span> :
+                                        <span class="kw">return</span>
+
+
+<span class="kw">def</span> actionPageFeed() :
+
+        pageFeedButton = <img src="images/pagesFeed.png" />
+        homeButton = <img src="images/home.png" />
+        postButton = <img src="images/postButton.png" />
+
+        radomizeLike = [<span class="str">'likes'</span>, <span class="str">'skip'</span>, <span class="str">'commentLike'</span>, <span class="str">'skip'</span>, <span class="str">'share'</span>] <span class="cmt">#'likes', 'skip', 'commentLike' 'skip', 'share'</span>
+
+        shareLimit = <span class="dig">1</span>
+        likeLimit = <span class="dig">2</span>
+        commentLikeLimit = <span class="dig">2</span>
+        startScroll = False
+
+        limit = <span class="dig">20</span>
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="skw">type</span>(Key.HOME);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(homeButton)) :
+                <span class="skw">click</span>(homeButton)
+                <span class="skw">wait</span>(postButton, FOREVER)
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="kw">return</span>
+
+        <span class="kw">while</span> (<span class="kw">not</span> exists(pageFeedButton)) :
+                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+
+                limit = limit - <span class="dig">1</span>
+
+                <span class="kw">if</span> (limit &lt;= <span class="dig">0</span>) :
+                        <span class="kw">return</span>
+
+        <span class="kw">else</span> :
+                <span class="skw">click</span>(pageFeedButton);<span class="skw">wait</span>(<span class="dig">7</span>)
+                startScroll = True
+
+        <span class="kw">if</span> (startScroll == True) :
+
+                <span class="kw">while</span>(<span class="dig">1</span>) :
+                        actions = random.choice(radomizeLike)
+                        wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+
+                        loginLogoHover()
+
+                        <span class="kw">if</span> (likeLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> shareLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> commentLikeLimit &lt;= <span class="dig">0</span>) :
+
+                                <span class="kw">break</span>
+
+                        <span class="kw">if</span> (actions == <span class="str">"skip"</span>) :
+                                wheel(WHEEL_DOWN, <span class="dig">4</span>)
+
+                        <span class="kw">if</span> (actions == <span class="str">'likes'</span> <span class="kw">and</span> likeLimit &gt; <span class="dig">0</span>) :
+                                like();<span class="skw">wait</span>(<span class="dig">3</span>)
+                                likeLimit = likeLimit - <span class="dig">1</span>
+                                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+                                <span class="kw">if</span> (likeLimit &lt;= <span class="dig">0</span>) :
+                                        radomizeLike.remove(<span class="str">'likes'</span>)
+
+                        <span class="kw">if</span> (actions == <span class="str">'share'</span> <span class="kw">and</span> shareLimit &gt; <span class="dig">0</span>) :
+                                share();<span class="skw">wait</span>(<span class="dig">3</span>)
+                                shareLimit = shareLimit - <span class="dig">1</span>
+                                wheel(WHEEL_DOWN, <span class="dig">3</span>)
+                                <span class="kw">if</span> (shareLimit &lt;= <span class="dig">0</span>) :
+                                        radomizeLike.remove(<span class="str">'share'</span>)
+
+
+                        <span class="kw">if</span> (actions == <span class="str">"commentLike"</span> <span class="kw">and</span> commentLikeLimit &gt; <span class="dig">0</span>) :
+                                commentLike()
+                                commentLikeLimit = commentLikeLimit - <span class="dig">1</span>
+                                wheel(WHEEL_DOWN, <span class="dig">5</span>)
+                                <span class="kw">if</span> (commentLikeLimit &lt;= <span class="dig">0</span>) :
+                                        radomizeLike.remove(<span class="str">'commentLike'</span>)
+
+<span class="kw">def</span> postStatus() :
+
+        <span class="kw">try</span>:
+
+                C = db.cursor()
+                C.execute (<span class="str">"SELECT * FROM posts ORDER BY RAND() LIMIT 1"</span>)
+                row = C.fetchone()
+
+        <span class="kw">except</span> Exception, e:
+
+                <span class="kw">print</span> <span class="str">"Failed to connect to the database. Please check your internet connection : Post Status"</span>
+                <span class="kw">return</span> <span class="dig">1</span>
+
+
+        data =  row[<span class="dig">1</span>] <span class="cmt">#data = getcsvData(postCsvPath)</span>
+        postMessage = data
+
+        homeButton = <img src="images/home.png" />
+        postButton = Pattern(<span class="str">"images/postButton"</span>).targetOffset(<span class="dig">52</span>,-<span class="dig">4</span>)
+        writeStatus = <span class="str">"images/writestatus"</span>
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="skw">type</span>(Key.HOME);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+
+        <span class="kw">if</span> (exists(homeButton)) :
+                <span class="skw">click</span>(homeButton)
+                <span class="skw">wait</span>(postButton, FOREVER)
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="kw">return</span>
+
+        <span class="skw">wait</span>(postButton, FOREVER)
+
+        <span class="kw">while</span>(<span class="kw">not</span> exists(postButton)) :
+                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+        <span class="kw">else</span> :
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">click</span>(writeStatus);<span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">type</span>(postMessage);<span class="skw">wait</span>(<span class="dig">2</span>)
+                <span class="skw">click</span>(postButton);<span class="skw">wait</span>(<span class="dig">5</span>)
+
+
+
+<span class="kw">def</span> aboutPage() :
+
+        newsFeedButton =  Pattern(<img src="images/home.png" />).similar(<span class="dig">0.80</span>).targetOffset(-<span class="dig">56</span>,<span class="dig">1</span>)
+        aboutButton = <img src="images/about.png" />
+        sports = <img src="images/sports.png" />
+        sportsNextButton = Pattern(<img src="images/sports.png" />).targetOffset(<span class="dig">765</span>,<span class="dig">184</span>)
+        close = <img src="images/aboutClose.png" />
+
+        <span class="kw">if</span> (exists(newsFeedButton)) :
+                <span class="skw">click</span>(newsFeedButton)
+                <span class="skw">wait</span>(aboutButton, FOREVER)
+
+                <span class="kw">if</span> (exists(aboutButton)) :
+                        <span class="skw">click</span>(aboutButton);<span class="skw">wait</span>(<span class="dig">2</span>)
+
+                        <span class="kw">while</span>(<span class="dig">1</span>) :
+                                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+                                <span class="kw">if</span> (exists(sports)) :
+                                        wheel(WHEEL_DOWN, <span class="dig">1</span>);<span class="skw">wait</span>(<span class="dig">3</span>)
+                                        <span class="skw">click</span>(Pattern(sports).targetOffset(<span class="dig">48</span>,<span class="dig">191</span>));<span class="skw">wait</span>(<span class="dig">1</span>)
+                                        <span class="skw">click</span>(Pattern(sports).targetOffset(<span class="dig">359</span>,<span class="dig">193</span>));<span class="skw">wait</span>(<span class="dig">1</span>)
+                                        <span class="skw">click</span>(close);<span class="skw">wait</span>(<span class="dig">1</span>)
+
+                                        <span class="cmt">#if (exists(sports)) :</span>
+                                                <span class="cmt">#click(Pattern(sports).targetOffset(48,191));wait(1)</span>
+                                                <span class="cmt">#click(sportsNextButton);wait(1)</span>
+                                                <span class="cmt">#click(Pattern(sports).targetOffset(359,193));wait(1)</span>
+                                                <span class="cmt">#click(close);wait(1)</span>
+
+<span class="kw">def</span> actionTrending() :
+
+        endResult = <img src="images/endResult.png" />
+
+        homeButton = <img src="images/home.png" />
+        LoginLogo = <span class="str">'images/loginLogo.png'</span> <span class="cmt">#Pattern(data).exact()</span>
+        trendingImage = Pattern(<img src="images/trending.png" />).similar(<span class="dig">0.90</span>).targetOffset(-<span class="dig">4</span>,<span class="dig">1</span>)
+        trendingArrow = Pattern(<img src="images/trendingArrow.png" />).similar(<span class="dig">0.90</span>).targetOffset(<span class="dig">20</span>,<span class="dig">0</span>)
+
+        radomizeAct = [<span class="str">'likes'</span>, <span class="str">'skip'</span>,  <span class="str">'share'</span>]
+
+        trendingCount = <span class="dig">0</span>;
+        flag = <span class="dig">0</span>;
+
+        likeLimit = <span class="dig">1</span>
+        shareLimit = <span class="dig">1</span>
+        writeLimit =  <span class="dig">1</span>
+
+        <span class="kw">if</span> (<span class="kw">not</span> exists(homeButton)) :
+                <span class="skw">type</span>(Key.HOME);<span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="kw">if</span> (exists(homeButton)) :
+                <span class="skw">wait</span>(<span class="dig">3</span>)
+                <span class="skw">click</span>(homeButton)
+
+                <span class="skw">wait</span>(<span class="dig">4</span>)
+
+                <span class="kw">if</span> (exists(LoginLogo)) :
+
+                        <span class="kw">while</span>(<span class="kw">not</span> exists(trendingArrow)) :
+
+                                <span class="kw">if</span> (trendingArrow == <span class="dig">10</span>) :
+                                        <span class="kw">break</span>
+
+                                        <span class="kw">return</span>
+
+                                trendingCount = trendingCount + <span class="dig">1</span>;
+
+                        <span class="kw">else</span> :
+                                <span class="skw">wait</span>(<span class="dig">3</span>)
+
+                                <span class="kw">if</span> (exists(trendingArrow)) :
+                                        <span class="skw">click</span>(random.choice(list(findAll(trendingArrow))));<span class="skw">wait</span>(<span class="dig">5</span>)
+                                        flag = <span class="dig">1</span>
+                                <span class="kw">else</span> :
+                                        <span class="kw">return</span>
+
+                <span class="kw">if</span> (flag == <span class="dig">1</span>)  :
+
+                        <span class="kw">while</span>(<span class="dig">1</span>) :
+
+                                <span class="kw">if</span> (exists(endResult)) :
+                                        <span class="kw">break</span>
+                                        <span class="kw">return</span>
+
+                                wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+
+                                <span class="kw">if</span> (shareLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> <span class="str">'share'</span> <span class="kw">in</span> radomizeAct) :
+                                        radomizeAct.remove(<span class="str">'share'</span>)
+
+                                <span class="kw">if</span> (likeLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> <span class="str">'likes'</span> <span class="kw">in</span> radomizeAct) :
+                                        radomizeAct.remove(<span class="str">'likes'</span>)
+
+
+
+                                actions = random.choice(radomizeAct)
+
+                                <span class="kw">if</span> (likeLimit &lt;= <span class="dig">0</span> <span class="kw">and</span> shareLimit &lt;= <span class="dig">0</span>) :
+
+                                        <span class="kw">return</span>
+                                        <span class="kw">break</span>
+
+                                <span class="kw">if</span> (actions == <span class="str">"skip"</span>) :
+                                        wheel(WHEEL_DOWN, <span class="dig">3</span>);<span class="skw">wait</span>(<span class="dig">5</span>)
+                                        <span class="kw">continue</span>
+
+                                <span class="kw">if</span> (actions == <span class="str">"likes"</span>) :
+
+                                        like()
+                                        likeLimit = likeLimit - <span class="dig">1</span>
+
+
+                                <span class="kw">if</span> (actions == <span class="str">'share'</span>) :
+                                        share()
+                                        shareLimit  = shareLimit - <span class="dig">1</span>
+
+
+                <span class="kw">if</span> (<span class="kw">not</span> exists(LoginLogo)) :
+
+                        <span class="kw">return</span> <span class="dig">1</span>
+
+
+
+<span class="kw">def</span> logout() :
+
+        <span class="cmt">#logOutMenu =  Pattern("images/logoutmenu.png").similar(0.80).targetOffset(12,-1)</span>
+        <span class="cmt">#logoutBtn = Pattern("images/logout.png").similar(0.80).targetOffset(-8,0)</span>
+        <span class="cmt">#loginBtn = "images/loginButton.png"</span>
+        <span class="skw">wait</span>(<span class="dig">3</span>)
+
+        <span class="skw">type</span>(<span class="str">'w'</span>, Key.CTRL)
+        exit(<span class="dig">1</span>)
+        <span class="cmt">#App.close("Google Chrome.app")</span>
+
+        <span class="cmt">#if (not exists(logOutMenu)) :</span>
+                <span class="cmt">#App.close("Google Chrome.app")</span>
+        <span class="cmt">#else :</span>
+
+                <span class="cmt">#click(logOutMenu);wait(5)</span>
+                <span class="cmt">#if (exists(logoutBtn)) :</span>
+                        <span class="cmt">#click(logoutBtn);wait(3)</span>
+                        <span class="cmt">#wait(loginBtn, FOREVER);wait(2)</span>
+                        <span class="cmt">#App.close("Google Chrome.app")</span>
+                <span class="cmt">#else :</span>
+                        <span class="cmt">#App.close("Google Chrome.app")</span>
+
+
+
+<span class="str">'''
+        count = 0
+        maxCount = 3
+        #wheel(WHEEL_DOWN, 4);wait(1)
+
+        fbLikeButton = Pattern("images/likeButton.png").similar(0.90).targetOffset(-98,-2)
+        currentLikeButton = Pattern("images/currentLike.png").similar(0.96)
+
+        #searchBarUrl("https://www.facebook.com")
+        if (not exists(fbLikeButton)) :
+                return 0
+
+        if(exists(fbLikeButton)):
+                click(fbLikeButton);wait(1)
+
+                return 1
+        
+
+def actionLikeFanPage():
+        count = 0
+        maxCount = 3
+        
+        yourPage = Pattern("images/yourPage.png").similar(0.85)
+        topSuggestion = "images/top-suggestions.png"
+        pagesLikeButton = Pattern("images/pagesLikeButton.png").similar(0.79)
+        securityCheck =  Pattern("images/securitycheck.png").similar(0.81) 
+        
+        searchBarUrl("https://www.facebook.com/pages/?category=top")
+        wait(yourPage, FOREVER);
+        
+
+        if (exists(topSuggestion)) :
+                click(topSuggestion);wait(1);
+                wait(yourPage, FOREVER)
+
+                while(1):
+
+                        wheel(WHEEL_DOWN, 4);wait(1)
+                        if (exists(pagesLikeButton)) :
+                                click(pagesLikeButton)
+                                wheel(WHEEL_DOWN, 4);wait(1)
+
+                        if (exists(securityCheck)) :
+                                break
+
+                        count = count + 1
+
+                        if (count == maxCount):
+                                return
+
+
+def actionSharePost() :
+
+        count = 0
+        maxCount = 3
+
+        shareButton = Pattern("images/shareButton.png").similar(0.80).targetOffset(-4,-1)
+        sharePopUp = Pattern("images/sharePopup.png").targetOffset(-46,0)
+        sharePostButton = Pattern("images/sharePostButton.png").targetOffset(84,-3)
+
+        ##searchBarUrl("https://www.facebook.com")
+
+        if (not exists(shareButton)) :
+                return 0
+
+        if(exists(shareButton)):
+                click(shareButton)
+                wait(sharePopUp, FOREVER)
+                click(sharePopUp)
+                wait(sharePostButton, FOREVER)
+                click(sharePostButton);wait(7)
+                wheel(WHEEL_DOWN, 12);wait(1)
+
+                return 1
+def actionHidePost() :
+
+        postArrow = Pattern("images/postArrow.png").similar(0.99)
+        hidePost = Pattern("images/hidePost.png").targetOffset(-56,-3)
+
+        if (not exists(postArrow)) :
+                return 0
+
+        if(exists(postArrow)):
+                click(postArrow);wait(1)
+
+                if(exists(hidePost)):
+                        click(hidePost);wait(2)
+                        return 1
+
+                if (not exists(hidePost)) :
+                        return 0
+
+def actionNotif() :
+
+        notifButton = Pattern("images/notif.png").exact().targetOffset(-55,2)
+
+        if (not exists(notifButton)) :
+                return 0
+
+        if(exists(notifButton)):
+                wait(4)
+                click(notifButton);wait(3)
+                click(notifButton);wait(1)
+
+                return 1
+
+'''</span>
+</pre>
+</body>
+</html>
