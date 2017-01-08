@@ -1,6 +1,6 @@
 {
 	"app_title": "Sikuli Bot",
-	"watch_folder": "C:/Users/VMT-1/Desktop/FireFoxBotAD/fb.sikuli",
+	"watch_folder": "C:/Users/Administrator/Desktop/farming_code/FireFoxBotAD/fb.sikuli",
 
 	"ftp": {
 		"address": "138.68.7.25",
@@ -9,7 +9,7 @@
 	},
 
 	"ftp_home": "/root/auto_update_host_ff/",
-	"exe_to_run": "C:/Users/VMT-1/Desktop/Sikuli/runsikulix.cmd",
+	"exe_to_run": "C:/Users/Administrator/Desktop/SikuliX/runsikulix.cmd",
 	"exe_argument": "",
 
 	"keep_pkg": true

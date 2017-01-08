@@ -1,9 +1,9 @@
 
 @echo on
 c:
-cd C:\Users\VMT-1\Desktop
+cd C:\Users\Administrator\Desktop
 
-call "C:\Users\VMT-1\Desktop\Sikuli\runsikulix.cmd" -r "C:\Users\VMT-1\Desktop\FirefoxBotAD\fb.sikuli"
+call "C:\Users\Administrator\Desktop\SikuliX\runsikulix.cmd" -r "C:\Users\Administrator\Desktop\farming_code\FirefoxBotAD\fb.sikuli"
 
 timeout /t 120
 
