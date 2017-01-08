@@ -1,10 +1,15 @@
-import functions 
-reload(functions) 
+# before the first import
+import org.sikuli.util.JythonHelper
+JythonHelper.get().addSysPath(getBundlePath())
+
+
+import functions
+reload(functions)
 from functions import *
 
 
-import globalvariable 
-reload(globalvariable) 
+import globalvariable
+reload(globalvariable)
 from globalvariable import *
 import random
 
@@ -34,10 +39,10 @@ for action in actions :
 
     if action == "view_friends" :
         Friends()
-        
+
     if action == "buzzfeed" :
         buzzFeed()
-        
+
     if (action == "like_fan_page") :
         actionLikeFanPage()
 
@@ -51,48 +56,48 @@ for action in actions :
 
     if (action == 'logout') :
         logout()
-        
-        
-
-       
-
-        
-        
-
-        
-
-        
-
-        
-
-        
 
 
-       
-
-       
-        
-
-        
-
-        
-
-    
-        
 
 
-        
 
 
-       
-   
-           
-
- 
-       
-
-     
 
 
-     
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

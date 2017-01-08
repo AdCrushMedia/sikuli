@@ -11,16 +11,11 @@ import csv
 
 
 def developerModeEnable() :
-
 	devImage = Pattern("images/developerMode.png").targetOffset(36,-1)
-
 	if (exists(devImage)) :
 		click(devImage);
-
 		return
-
 	return
-
 
 
 def getcsvData(filename) :
@@ -28,9 +23,7 @@ def getcsvData(filename) :
 	with open(filename, 'rU') as csvfile:
 		csvreader = csv.reader(csvfile)
 		my_list = list(csvreader)
-
 		data = random.choice(my_list)
-
 		return data
 
 		
@@ -40,7 +33,7 @@ def openBrowser():
 
 	if not browser.window(): 
 		isOpenChrome = 1
-	else :
+	else:
 		App.close("Mozilla Firefox.app")
 		isOpenChrome = 1
 
@@ -48,7 +41,7 @@ def openBrowser():
 		wait(5)
 		App.open(broserLocation + " --start-maximized");wait(2)
 
-		wait(5)
+		wait(55)
 		#developerModeEnable()
 
 		#browser.focus();wait(2)
